@@ -2,11 +2,11 @@
 # Create SSH key pair with RSA algorithm, 4096 bits, and passphrase "betty"
 ssh-keygen -t rsa -b 4096 -C "school" -f school -N "betty"
 
-# Check if the private key file is in RSA format
-if openssl rsa -in school -noout -text &> /dev/null; then
-    echo "Private key is in RSA format."
+# Check if the private key file is an OpenSSH private key
+if ssh-keygen -y -f school &> /dev/null; then
+    echo "Private key is an OpenSSH private key."
 else
-    echo "Error: Private key is not in RSA format."
+    echo "Error: Private key is not an OpenSSH private key."
     exit 1
 fi
 
