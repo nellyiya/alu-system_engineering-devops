@@ -1,13 +1,11 @@
 #!/usr/bin/env bash
-# Create SSH key pair with RSA algorithm, 4096 bits, and passphrase "betty"
-ssh-keygen -t rsa -b 4096 -C "school" -f school -N "betty"
+#!/usr/bin/env bash
+# Create an RSA key pair with a passphrase
+ssh-keygen -t rsa -b 4096 -N "betty" -f school
 
-# Check if the private key file is an OpenSSH private key
-if ssh-keygen -y -f school &> /dev/null; then
-    echo "Private key is an OpenSSH private key."
-else
-    echo "Error: Private key is not an OpenSSH private key."
-    exit 1
-fi
-
-echo "SSH key pair created successfully."
+# Display the generated key fingerprint and randomart image
+echo "Your identification has been saved in school."
+echo "Your public key has been saved in school.pub."
+ssh-keygen -l -E md5 -f school.pub
+echo "The key's randomart image is:"
+ssh-keygen -lv -E md5 -f school.pub | tail -n 2
