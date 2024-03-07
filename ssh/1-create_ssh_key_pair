@@ -1,10 +1,5 @@
 #!/usr/bin/env bash
-# Create an RSA key pair
-ssh-keygen -t rsa -b 4096 -N "betty" -f school
+# Create SSH key pair with RSA algorithm, 4096 bits, and passphrase "betty"
+ssh-keygen -t rsa -b 4096 -C "school" -f school -N "betty"
 
-# Display the generated key fingerprint
-echo "Your identification has been saved in school."
-echo "Your public key has been saved in school.pub."
-ssh-keygen -l -E md5 -f school.pub
-echo "The key's randomart image is:"
-ssh-keygen -lv -E md5 -f school.pub | tail -n 2
+echo "SSH key pair created successfully."
