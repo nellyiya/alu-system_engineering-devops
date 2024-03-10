@@ -1,37 +1,24 @@
 #!/usr/bin/env bash
-#Install and configure HAproxy
 
-apt-get update
-apt-get install -y haproxy
+# Configure Nginx so that its HTTP response contains
+# a custom header
 
-sudo mv /etc/haproxy/haproxy.cfg /etc/haproxy/haproxy.cfg.bak
-sudo tee /etc/haproxy/haproxy.cfg > /dev/null <<EOT
-global
-    daemon
-    maxconn 256
+# Add HAProxy PPA
+sudo apt-get -y install software-properties-common
+sudo add-apt-repository -y ppa:vbernat/haproxy-2.5
+sudo apt-get -y update
 
-defaults
-    mode http
-    timeout connect 5000ms
-    timeout client 50000ms
-    timeout server 50000ms
+# Install HAProxy
+sudo apt-get -y install haproxy
 
-frontend http-in
-    bind *:80
-    default_backend webservers
-
-backend webservers
+# Configure HAProxy
+cat <<EOF | sudo tee -a /etc/haproxy/haproxy.cfg
+listen http-in
+    bind :80
     balance roundrobin
-    server web-01 52.72.182.175:80 check
-    server web-02 54.205.176.164:80 check
-EOT
+    server web-01 100.24.74.197:80 check
+    server web-02 52.91.117.197:80 check
+EOF
 
-# Update the hostname
-sudo hostnamectl set-hostname 164001127-haproxy
-
-# Enable HAProxy as a service managed by the init script
-sudo service haproxy enable 
-
-# Restart HAProxy service
+# Restart HAProxy
 sudo service haproxy restart
-
