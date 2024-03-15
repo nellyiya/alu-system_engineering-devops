@@ -22,8 +22,8 @@ frontend http-in
 
 backend webservers
     balance roundrobin
-    server web-01 18.234.214.139:80 check
-    server web-02 3.89.248.28:80 check
+    server web-01 44.222.228.253:80 check
+    server web-02 54.221.9.74:80 check
 EOT
 
 # Update the hostname
