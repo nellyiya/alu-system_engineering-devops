@@ -1,36 +1,16 @@
 #!/usr/bin/env bash
-#Install and configure HAproxy
+#Bash script that installs HAProxy & makes configurations
 
+apt-get -y install software-properties-common
+add-apt-repository ppa:vbernat/haproxy-1.8
 apt-get update
-apt-get install -y haproxy
-
-sudo mv /etc/haproxy/haproxy.cfg /etc/haproxy/haproxy.cfg.bak
-sudo tee /etc/haproxy/haproxy.cfg > /dev/null <<EOT
-global
-    daemon
-    maxconn 256
-
-defaults
-    mode http
-    timeout connect 5000ms
-    timeout client 50000ms
-    timeout server 50000ms
-
-frontend http-in
+apt-get -y install haproxy
+echo "ENABLED=1" >> /etc/default/haproxy
+printf %s "listen 6052-webs
     bind *:80
-    default_backend webservers
-
-backend webservers
+    mode http
     balance roundrobin
-    server web-01 18.234.214.139:80 check
-    server web-02 3.89.248.28:80 check
-EOT
-
-# Update the hostname
-sudo hostnamectl set-hostname 164001127-haproxy
-
-# Enable HAProxy as a service managed by the init script
-sudo service haproxy enable 
-
-# Restart HAProxy service
+    server 6043-web-01 44.222.228.253:80 check
+    server 6043-web-02 54.221.9.74:80 check
+" >> /etc/haproxy/haproxy.cfg
 sudo service haproxy restart
